@@ -7,34 +7,61 @@ function SubtitleList({ video, subtitles }) {
     setStartTime(time);
   };
 
-  return (
-    <div style={{ marginTop: '2rem' }}>
-      <h3>{video.title}</h3>
+  const formatTime = (seconds) => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor(seconds % 60);
 
-      {/* Youtube embed player */}
+    const padded = (n) => n.toString().padStart(2, '0');
+
+    if (h > 0) {
+      return `${padded(h)}:${padded(m)}:${padded(s)}`;
+    } else {
+      return `${padded(m)}:${padded(s)}`;
+    }
+  };
+
+  return (
+    <div style={{ marginTop: '2rem', textAlign: 'center' }}>
+      <h3 style={{ fontSize: '1.4rem', marginBottom: '1rem' }}>{video.title}</h3>
+
       <iframe
-        width="560"
-        height="315"
-        key={startTime} 
+        key={startTime}
         src={`https://www.youtube.com/embed/${video.video_id}?start=${Math.floor(startTime)}&autoplay=1&modestbranding=1&rel=0`}
-        title="YouTube video"
-        frameBorder="0"
+        title="YouTube video player"
+        style={{
+          width: '100%',
+          maxWidth: '640px',
+          height: '360px',
+          border: 'none',
+          marginBottom: '1.5rem',
+        }}
         allow="autoplay; encrypted-media"
         allowFullScreen
       ></iframe>
 
-      <ul>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
         {subtitles.map((s, idx) => (
-          <li key={idx}>
-            <button
-              style={{ margin: '5px 0', padding: '4px 10px' }}
-              onClick={() => handleSubtitleClick(s.start_time)}
-            >
-              [{Math.floor(s.start_time)}s] {s.text}
-            </button>
-          </li>
+          <button
+            key={idx}
+            onClick={() => handleSubtitleClick(s.start_time)}
+            style={{
+              backgroundColor: '#f0f0f0',
+              border: '1px solid #ccc',
+              padding: '8px 12px',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              width: '90%',
+              maxWidth: '600px',
+              transition: 'background-color 0.2s',
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#dbeeff'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#f0f0f0'}
+          >
+            [{formatTime(s.start_time)}] {s.text}
+          </button>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

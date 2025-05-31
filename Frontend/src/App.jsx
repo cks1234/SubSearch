@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import SearchForm from './components/SearchForm';
 import VideoList from './components/VideoList';
 import SubtitleList from './components/SubtitleList';
+import './App.css';
 
 const API = import.meta.env.VITE_API_BASE_URL;
 
@@ -28,12 +29,13 @@ function App() {
 
   return (
     <div className="container">
-      <h1>YouTube Subtitle Search</h1>
+      <h1>MrBeast Video Search</h1>
+      <p>Type a keyword to find where it's mentioned in MrBeast videos.</p>
       <SearchForm onSearch={handleSearch} />
-      <VideoList videos={videos} onSelect={handleVideoSelect} />
-      {selectedVideo && (
+            {selectedVideo && (
         <SubtitleList video={selectedVideo} subtitles={subtitles} />
       )}
+      <VideoList videos={videos} onSelect={handleVideoSelect} selectedVideo={selectedVideo}/>
     </div>
   );
 }
