@@ -5,8 +5,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/search': 'http://localhost:5000',
-      '/subtitles': 'http://localhost:5000',
+      '/search': 'http://cks123.pythonanywhere.com',
+      '/subtitles': 'http://cks123.pythonanywhere.com',
     }
   }
 })
