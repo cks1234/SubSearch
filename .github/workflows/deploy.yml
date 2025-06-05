@@ -21,7 +21,7 @@ jobs:
 
     - name: Copy project to EC2
       run: |
-        scp -r . ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/mrbeast-app
+        rsync -avz --exclude='.git' ./ ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/mrbeast-app
 
     - name: Build and Run with Docker Compose on EC2
       run: |
