@@ -1,0 +1,25 @@
+name: EC2 SSH Deploy Test
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Set up SSH
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+    - name: Send test file to EC2
+      run: |
+        echo "GitHub Actions has connected to EC2" > test.txt
+        scp test.txt ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/
