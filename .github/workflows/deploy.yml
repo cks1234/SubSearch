@@ -1,4 +1,4 @@
-name: EC2 SSH Deploy Test
+name: Deploy MrBeast Subtitle App
 
 on:
   push:
@@ -19,7 +19,14 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-    - name: Send test file to EC2
+    - name: Copy project to EC2
       run: |
-        echo "GitHub Actions has connected to EC2" > test.txt
-        scp test.txt ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/
+        scp -r . ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/mrbeast-app
+
+    - name: Build and Run with Docker Compose on EC2
+      run: |
+        ssh ubuntu@${{ secrets.EC2_HOST }} << EOF
+          cd /home/ubuntu/mrbeast-app
+          docker-compose down
+          docker-compose up -d --build
+        EOF
